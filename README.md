@@ -1,16 +1,43 @@
-
-# Clone-Spotify-Web-Player
-
-a clone project that you can upload song files, create lists.
-
 ### Dev Dependencies
-npm
+- Npm
+- Quasar Cli
+```bash
+npm install -g @quasar/cli
+```
+- http-server
+```bash
+npm install -g http-server
+```
 
 ### Install the dependencies
-
+```bash
+cd backend
 npm install
 
+cd frontend
+npm install
+```
 
 ### Start the Server
+```bash
+cd backend
+npm run watch
+```
 
-npm run start
+### Start the App in Dev Mode
+```bash
+cd frontend
+quasar dev
+```
+
+### Build the App for Production
+- Building
+```bash
+cd frontend
+quasar build
+```
+- Run Frontend App
+```bash
+cd dist/spa
+http-server
+```
