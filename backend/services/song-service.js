@@ -15,7 +15,6 @@ class SongService extends BaseService {
       recordCompany,
     });
     const user = await userService.find(userId);
-    user.favoriteSongs.push(song._id);
 
     await userService.update(userId, user);
 

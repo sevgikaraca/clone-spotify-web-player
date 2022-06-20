@@ -16,6 +16,31 @@ router.get('/:albumId', async (req, res) => {
   res.send(album);
 });
 
+router.get('/albumCover/:albumCoverId', async (req, res) => {
+  const albumCoverId = new mongoose.mongo.ObjectID(req.params.albumCoverId);
+  res.set('content-type', 'image/png');
+  res.set('accept-ranges', 'bytes');
+
+  const bucket = new mongoose.mongo.GridFSBucket(db.db, {
+    bucketName: 'albumCovers',
+  });
+
+  const downloadStream = bucket.openDownloadStream(albumCoverId);
+
+  downloadStream.on('data', (chunk) => {
+    res.write(chunk);
+  });
+
+  downloadStream.on('error', (err) => {
+    console.log('error', err);
+    res.sendStatus(404);
+  });
+
+  downloadStream.on('end', () => {
+    res.end();
+  });
+});
+
 router.post('/album', async (req, res) => {
   const storage = multer.memoryStorage();
   const upload = multer({

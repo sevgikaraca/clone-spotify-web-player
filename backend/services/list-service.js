@@ -3,9 +3,9 @@ const List = require('../models/list');
 const userService = require('./user-service');
 
 class ListService extends BaseService {
-  async createList(userId, name, isPublic) {
+  async createList(userId, name, isPublic, playlistCoverId) {
     const user = await userService.find(userId);
-    const list = await this.insert({ ownerId: userId, name, isPublic });
+    const list = await this.insert({ ownerId: userId, name, isPublic, playlistCoverId });
     user.savedLists.push(list.id);
 
     await userService.update(userId, user);

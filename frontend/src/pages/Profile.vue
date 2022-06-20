@@ -13,7 +13,7 @@
           />
         </div>
         <div class="col-4 q-mt-xl">
-          <p class="text-white q-mt-xl">Profil</p>
+          <p class="text-white q-mt-xl">Profile</p>
           <h2 class="text-white text-bold no-margin">Sevgi</h2>
           <p class="text-white q-mt-xl">
             5 public playlists - 4 Followers - 5 Following

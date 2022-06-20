@@ -40,12 +40,6 @@ class UserService extends BaseService {
     await this.update(userId, user);
   }
 
-  async addToQueue(userId, songId) {
-    const user = await this.find(userId);
-    user.queue.push(songId);
-    await this.update(userId, user);
-  }
-
   async followUser(userId, following) {
     const user = await this.find(userId);
     user.following.push(following);

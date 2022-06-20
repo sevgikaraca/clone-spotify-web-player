@@ -13,9 +13,9 @@ router.get('/:artistId', async (req, res) => {
 });
 router.post('/artist', async (req, res) => {
   const { name, userId } = req.body;
-
-  await artistService.createArtist(userId, name);
-
+  console.log(req.body);
+  const data = await artistService.createArtist(userId, name);
+  console.log(data);
   res.send('ok');
 });
 

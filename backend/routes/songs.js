@@ -69,7 +69,7 @@ router.post('/song', async (req, res) => {
       });
 
       const {
-        name, duration, releaseDate, artists, genres, recordCompany, listener, userId
+        name, duration, releaseDate, artists, genres, recordCompany, userId
       } = req.body;
       console.log({ name, duration, releaseDate, artists, genres, recordCompany, userId});
       const uploadStream = bucket.openUploadStream(req.body.name);

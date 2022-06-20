@@ -8,6 +8,10 @@ const ListSchema = new mongoose.Schema({
   },
   name: String,
   isPublic: Boolean,
+  playlistCoverId: {
+    type: mongoose.Types.ObjectId,
+    autopopulate: false,
+  },
   songs: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Song',
