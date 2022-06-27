@@ -4,11 +4,11 @@ const userService = require('./user-service');
 const artistService = require('./artist-service');
 
 class AlbumService extends BaseService {
-    async createAlbum(userId, artistId, name, songs, albumCoverId) {
+    async createAlbum(userId, artistId, name, albumCoverId) {
       const user = await userService.find(userId);
       let album;
       if (user) {
-        album = await this.insert({ name, songs, albumCoverId });
+        album = await this.insert({ name, albumCoverId });
         let artist = await artistService.find({_id: artistId });
         console.log(artist.albums)
         console.log(album._id)

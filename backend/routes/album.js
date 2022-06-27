@@ -7,6 +7,7 @@ const { albumService } = require('../services');
 
 router.get('/', async (req, res) => {
   const album = await albumService.load();
+  console.log(album);
   res.send(album);
 });
 
@@ -64,7 +65,7 @@ router.post('/album', async (req, res) => {
         bucketName: 'albumCovers',
       });
 
-      const { userId, name, artistId, songs } = req.body;
+      const { userId, name, artistId } = req.body;
       const uploadStream = bucket.openUploadStream(req.body.name);
       const { id } = uploadStream;
       readableTrackStream.pipe(uploadStream);
@@ -72,15 +73,13 @@ router.post('/album', async (req, res) => {
       uploadStream.on('error', () => res.status(500).json({ message: 'Dosya yükleme hatası' }));
 
       uploadStream.on('finish', async () => {
-        await albumService.createAlbum(userId, artistId, name, songs, new mongoose.mongo.ObjectID(id));
+        await albumService.createAlbum(userId, artistId, name, new mongoose.mongo.ObjectID(id));
         res.status(201).json({ message: `Dosya başarıyla yüklendi, Mongo ObjectID: ${id}` });
       });
     } catch (err) {
       console.log(err);
     }
   });
-
-  res.send('ok');
 });
 
 module.exports = router;

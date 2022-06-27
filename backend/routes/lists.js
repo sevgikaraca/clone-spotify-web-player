@@ -43,6 +43,12 @@ router.get('/playlistCover/:playlistCoverId', async (req, res) => {
 });
 
 router.post('/playlist', async (req, res) => {
+  const { userId, name, isPublic, songs } = req.body;
+  const data = await listService.createList(userId, name, isPublic, songs);
+  res.send('ok');
+});
+
+router.post('/playlistCover/:playlistId', async (req, res) => {
   const storage = multer.memoryStorage();
   const upload = multer({
     storage,
@@ -65,7 +71,7 @@ router.post('/playlist', async (req, res) => {
         bucketName: 'playlistCovers',
       });
 
-      const { userId, name, isPublic } = req.body;
+      const { playlistId } = req.params;
       const uploadStream = bucket.openUploadStream(req.body.name);
       const { id } = uploadStream;
       readableTrackStream.pipe(uploadStream);
@@ -73,7 +79,7 @@ router.post('/playlist', async (req, res) => {
       uploadStream.on('error', () => res.status(500).json({ message: 'Dosya yükleme hatası' }));
 
       uploadStream.on('finish', async () => {
-        await listService.createAlbum(userId, name, isPublic, new mongoose.mongo.ObjectID(id));
+        await listService.update(playlistId, {playlistCoverId: new mongoose.mongo.ObjectID(id)});
         res.status(201).json({ message: `Dosya başarıyla yüklendi, Mongo ObjectID: ${id}` });
       });
     } catch (err) {

@@ -1,91 +1,136 @@
 <template>
-  <q-page class="q-px-lg pageContainer" style="background-color: #121212">
-    <div>
-      <div class="row q-col-gutter-md nameDiv">
-        <div class="col-2 q-mt-xl">
-          <img
-            class="q-mb-lg q-mt-xl q-ml-md"
-            ratio="1"
-            src="https://placeimg.com/200/200/nature"
-            spinner-color="primary"
-            spinner-size="82px"
-            style="border: 1px solid #3e3e3e; border-radius: 100px"
-          />
-        </div>
-        <div class="col-4 q-mt-xl">
-          <p class="text-white q-mt-xl">Profile</p>
-          <h2 class="text-white text-bold no-margin">Sevgi</h2>
-          <p class="text-white q-mt-xl">
-            5 public playlists - 4 Followers - 5 Following
-          </p>
-        </div>
+  <q-page class="pageContainer" style="background-color: #121212">
+    <div class="row q-col-gutter-md nameDiv">
+      <div class="col-2 q-mt-xl">
+        <img
+          class="q-mb-lg q-mt-xl q-ml-md"
+          ratio="1"
+          src="https://placeimg.com/200/200/nature"
+          spinner-color="primary"
+          spinner-size="82px"
+          style="border: 1px solid #3e3e3e; border-radius: 100px"
+        />
       </div>
-      <div class="row q-col-gutter-lg">
-        <div class="col-10">
-          <h6 class="text-white text-bold">Public Playlists</h6>
-        </div>
-        <div class="col-2">
-          <q-btn class="float-right q-mt-xl pageContainer" text-color="white" label="SEE ALL" />
-        </div>
-        <div class="col-2 no-margin">
-          <SongBox />
-        </div>
-        <div class="col-2">
-          <SongBox />
-        </div>
-        <div class="col-2">
-          <SongBox />
-        </div>
-        <div class="col-2">
-          <SongBox />
-        </div>
-        <div class="col-2">
-          <SongBox />
-        </div>
-        <div class="col-2">
-          <SongBox />
-        </div>
+      <div class="col-4 q-mt-xl">
+        <p class="text-white q-mt-xl">Profile</p>
+        <h2 class="text-white text-bold no-margin">Sevgi</h2>
+        <p class="text-white q-mt-xl">
+          5 public playlists - 4 Followers - 5 Following
+        </p>
       </div>
-      <h6 class="text-white text-bold">Followers</h6>
-      <div class="row q-col-gutter-lg">
-        <div class="col-2">
-          <SongBox />
+    </div>
+    <div class="row header-box q-col-gutter-md q-my-sm">
+      <div class="col-12">
+        <div class="row q-col-gutter-lg">
+          <div class="col-10">
+            <p style="font-size: 20px" class="q-mt-lg text-white text-bold">
+              Public Playlists
+            </p>
+          </div>
+          <div class="col-2 float-right flex justify-end q-mt-md">
+            <q-btn
+              v-if="this.playlistCount > 8"
+              flat
+              style="color: #fff"
+              label="See All"
+              size="md"
+            />
+          </div>
+          <div class="box">
+            <ListBox />
+          </div>
+          <div class="box">
+            <ListBox />
+          </div>
+          <div class="box">
+            <ListBox />
+          </div>
+          <div class="box">
+            <ListBox />
+          </div>
+          <div class="box">
+            <ListBox />
+          </div>
+          <div class="box">
+            <ListBox />
+          </div>
+          <div class="box">
+            <ListBox />
+          </div>
         </div>
-        <div class="col-2">
-          <SongBox />
+        <div class="row q-col-gutter-lg">
+          <div class="col-10">
+            <p style="font-size: 20px" class="q-mt-lg text-white text-bold">
+              Followers
+            </p>
+          </div>
+          <div class="col-2 float-right flex justify-end q-mt-md">
+            <q-btn
+              v-if="this.followersCount > 8"
+              flat
+              style="color: #fff"
+              label="See All"
+              size="md"
+            />
+          </div>
+          <div class="box">
+            <ListBox />
+          </div>
+          <div class="box">
+            <ListBox />
+          </div>
+          <div class="box">
+            <ListBox />
+          </div>
+          <div class="box">
+            <ListBox />
+          </div>
+          <div class="box">
+            <ListBox />
+          </div>
+          <div class="box">
+            <ListBox />
+          </div>
+          <div class="box">
+            <ListBox />
+          </div>
         </div>
-        <div class="col-2">
-          <SongBox />
-        </div>
-        <div class="col-2">
-          <SongBox />
-        </div>
-        <div class="col-2">
-          <SongBox />
-        </div>
-        <div class="col-2">
-          <SongBox />
-        </div>
-      </div>
-      <h6 class="text-white text-bold">Following</h6>
-      <div class="row q-col-gutter-lg">
-        <div class="col-2">
-          <SongBox />
-        </div>
-        <div class="col-2">
-          <SongBox />
-        </div>
-        <div class="col-2">
-          <SongBox />
-        </div>
-        <div class="col-2">
-          <SongBox />
-        </div>
-        <div class="col-2">
-          <SongBox />
-        </div>
-        <div class="col-2">
-          <SongBox />
+        <div class="row q-col-gutter-lg">
+          <div class="col-10">
+            <p style="font-size: 20px" class="q-mt-lg text-white text-bold">
+              Following
+            </p>
+          </div>
+          <div class="col-2 float-right flex justify-end q-mt-md">
+            <q-btn
+              v-if="this.followingCount > 8"
+              flat
+              style="color: #fff"
+              label="See All"
+              size="md"
+            />
+          </div>
+          <div class="box">
+            <ListBox />
+          </div>
+          <div class="box">
+            <ListBox />
+          </div>
+          <div class="box">
+            <ListBox />
+          </div>
+          <div class="box">
+            <ListBox />
+          </div>
+          <div class="box">
+            <ListBox />
+          </div>
+          <div class="box">
+            <ListBox />
+          </div>
+          <div class="box">
+            <ListBox />
+          </div>
         </div>
       </div>
     </div>
@@ -93,36 +138,22 @@
 </template>
 
 <script>
-import SongBox from "../components/SongBox";
+import ListBox from "../components/ListBox";
 
 export default {
   name: "Profile",
 
   components: {
-    SongBox,
+    ListBox,
   },
 
   data() {
     return {
-      greeetingMessage: "",
+      playlistCount: 0,
+      followersCount: 0,
+      followingCount: 0,
     };
-  },
-  methods: {
-    getTime() {
-      const date = new Date();
-      let hours = date.getHours();
-      let status =
-        hours < 12
-          ? "Good Morning"
-          : hours <= 18 && hours >= 12
-          ? "Good Afternoon"
-          : "Good Night";
-      this.greeetingMessage = status;
-    },
-  },
-  mounted() {
-    this.getTime();
-  },
+  }
 };
 </script>
 
@@ -157,5 +188,14 @@ export default {
     #4c4c4c,
     #505050
   );
+}
+
+.box {
+  width: 10vw !important;
+}
+
+.header-box {
+  justify-content: space-between;
+  margin-left: 10px;
 }
 </style>

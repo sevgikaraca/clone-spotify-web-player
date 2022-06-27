@@ -42,9 +42,9 @@ router.post('/:userId/lists/:listId', async (req, res) => {
   res.send('ok');
 });
 
-router.post('/:userId/saveSong/:songId', async (req, res) => {
-  const { userId, songId } = req.params;
-  const user = await userService.saveSong(userId, songId);
+router.post('/favSong', async (req, res) => {
+  const { userId, songId } = req.body;
+  const user = await userService.favSong(userId, songId);
   res.send(user);
 });
 

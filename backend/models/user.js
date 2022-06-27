@@ -27,7 +27,7 @@ const UserSchema = new mongoose.Schema({
   favoriteSongs: [{
     type: mongoose.Types.ObjectId,
     ref: 'Song',
-    autopopulate: { maxDepth: 1 },
+    autopopulate: { maxDepth: 2 },
   }],
   following: [{
     type: mongoose.Types.ObjectId,

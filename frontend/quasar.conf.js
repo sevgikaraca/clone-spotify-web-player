@@ -100,7 +100,11 @@ module.exports = function (/* ctx */) {
       // directives: [],
 
       // Quasar plugins
-      plugins: []
+      plugins: [
+        'Notify',
+        'Loading',
+        'SessionStorage',
+      ]
     },
 
     // animations: 'all', // --- includes all animations
@@ -117,39 +121,39 @@ module.exports = function (/* ctx */) {
       workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
       workboxOptions: {}, // only for GenerateSW
       manifest: {
-        name: `Quasar App`,
-        short_name: `Quasar App`,
-        description: `A Quasar Project`,
+        name: `Spotify Web Player`,
+        short_name: `Spotify - Web Player`,
+        description: `Spotify Web Player Project`,
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',
         theme_color: '#027be3',
         icons: [
           {
-            src: 'icons/icon-128x128.png',
-            sizes: '128x128',
+            src: '../src/statics/logo.png',
+            sizes: '30x30',
             type: 'image/png'
           },
-          {
-            src: 'icons/icon-192x192.png',
-            sizes: '192x192',
-            type: 'image/png'
-          },
-          {
-            src: 'icons/icon-256x256.png',
-            sizes: '256x256',
-            type: 'image/png'
-          },
-          {
-            src: 'icons/icon-384x384.png',
-            sizes: '384x384',
-            type: 'image/png'
-          },
-          {
-            src: 'icons/icon-512x512.png',
-            sizes: '512x512',
-            type: 'image/png'
-          }
+          // {
+          //   src: 'icons/icon-192x192.png',
+          //   sizes: '192x192',
+          //   type: 'image/png'
+          // },
+          // {
+          //   src: 'icons/icon-256x256.png',
+          //   sizes: '256x256',
+          //   type: 'image/png'
+          // },
+          // {
+          //   src: 'icons/icon-384x384.png',
+          //   sizes: '384x384',
+          //   type: 'image/png'
+          // },
+          // {
+          //   src: 'icons/icon-512x512.png',
+          //   sizes: '512x512',
+          //   type: 'image/png'
+          // }
         ]
       }
     },

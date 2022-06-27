@@ -1,14 +1,20 @@
 <template>
-  <div class="row q-col-gutter-sm boxcolor text-bold miniBox">
-    <div class="col-3 float-left">
-      <img ratio="1" src="https://placeimg.com/80/80/nature" />
+  <div class="row q-col-gutter-sm text-bold miniBox">
+    <div class="col-3 no-padding no-margin float-left">
+      <q-img
+        :src="`${$axios.defaults.baseURL}/albums/albumCover/${song.album.albumCoverId}`"
+        :ratio="1"
+        class="image"
+        height="100px"
+        width="100px"
+      />
     </div>
     <div class="col-7 q-mt-md">
       {{ song.name }}
       <br />
       {{ song.artists.length && song.artists[0].name }}
     </div>
-    <div class="col-2 q-mt-md hidden-child">
+    <div class="col-1 q-mt-md hidden-child">
       <q-btn
         v-if="!isPlaying"
         color="green"
@@ -31,8 +37,8 @@
       />
     </div>
 
-    <q-menu content-class="songBox" touch-position context-menu>
-      <q-list dense style="min-width: 100px">
+    <q-menu content-class="miniBox" touch-position context-menu>
+      <q-list dense style="min-width: 100px" class="text-white">
         <q-item clickable v-close-popup>
           <q-item-section @click.stop="addToQueue(song)">
             Add to queue</q-item-section
@@ -45,8 +51,8 @@
             <q-icon name="keyboard_arrow_right" />
           </q-item-section>
 
-          <q-menu content-class="songBox" anchor="top end" self="top start">
-            <q-list dense style="min-width: 100px">
+          <q-menu anchor="top end" self="top start">
+            <q-list densestyle="min-width: 100px; background: #181818;"  class="text-white">
               <q-item clickable v-close-popup>
                 <q-item-section>Create playlist</q-item-section>
               </q-item>
@@ -115,7 +121,14 @@ export default {
 .miniBox {
   border: 0 solid #282828;
   border-radius: 5px;
-  background-color: #303b3e;
+  background-color: #303030 !important;
+}
+
+.image {
+  border-left: 0 solid #282828;
+  border-radius: 3px;
+  padding: 20px;
+  margin-right: 25px;
 }
 
 .miniBox .hidden-child {
@@ -124,6 +137,7 @@ export default {
 
 .miniBox:hover {
   background-color: #465052;
+  cursor: pointer
 }
 .miniBox:hover .hidden-child {
   visibility: visible;
