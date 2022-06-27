@@ -8,26 +8,15 @@ const ListSchema = new mongoose.Schema({
   },
   name: String,
   isPublic: Boolean,
+  songs: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Song',
+    autopopulate: { maxDepth: 2 },
+  }],
   playlistCoverId: {
     type: mongoose.Types.ObjectId,
     autopopulate: false,
   },
-  songs: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Song',
-    autopopulate: { maxDepth: 1 },
-  }],
-  whoCanSee: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    autopopulate: { maxDepth: 1 },
-  },
-  ],
-  whoCanAdd: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    autopopulate: { maxDepth: 1 },
-  }],
 }, { timestamps: true });
 
 ListSchema.plugin(require('mongoose-autopopulate'));

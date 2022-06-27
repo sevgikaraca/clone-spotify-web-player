@@ -5,7 +5,7 @@
   >
     <div class="col-lg-2 col-sm-3 q-py-sm q-pl-md">
       <q-btn
-        color="primary"
+        color="white"
         flat
         round
         icon="skip_previous"
@@ -17,7 +17,8 @@
         "
       />
       <q-btn
-        color="primary"
+        color="white"
+        text-color="black"
         round
         :icon="isPlaying ? 'pause' : 'play_arrow'"
         size="md"
@@ -28,7 +29,7 @@
         "
       />
       <q-btn
-        color="primary"
+        color="white"
         flat
         round
         icon="skip_next"

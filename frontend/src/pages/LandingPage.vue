@@ -1,72 +1,47 @@
 <template>
-  <q-page class="pageContainer" style="background-color: #121212">
+  <q-page class="pageContainer" style="background-color: #202020">
     <div class="row headerDiv">
       <div class="col-2 q-ml-md q-mt-xl">
         <h4 class="text-white text-bold">{{ this.greeetingMessage }}</h4>
       </div>
     </div>
-    <div class="q-px-lg">
-      <div class="row q-col-gutter-lg">
+    <div class="q-px-sm">
+      <div class="row q-col-gutter-lg ">
         <div
           class="col-4 text-white"
-          v-for="song in this.recommendedSongs"
+          v-for="(song, index) in this.recommendedSongs"
           :key="song"
         >
-          <MiniBox :song="song" v-on:play="onPlaySong" />
+          <MiniBox v-if="index < 6" :song="song" v-on:play="onPlaySong" />
         </div>
       </div>
-      <div class="row q-col-gutter-sm">
-        <div class="text-white text-bold col-10 q-mt-md" style="font-size:18px" >
-           Günlük müzik ihtiyacın
+      <div class="row header-box q-col-gutter-sm q-my-sm">
+        <div
+          class="text-white text-bold col-10 q-mt-md"
+          style="font-size: 22px"
+        >
+          Günlük müzik ihtiyacın
         </div>
-        <div class="col-2 float-right flex justify-end">
-          <q-btn flat style="color: #fff" label="See All    " />
+        <div class="col-2 float-right flex justify-end q-mt-md">
+          <q-btn
+            flat
+            style="color: #fff"
+            label="See All"
+            size="md"
+            v-if="allPlaylists.length > 8"
+          />
         </div>
-        <div class="test">
-          <SongBox />
-        </div>
-        <div class="test">
-          <SongBox />
-        </div>
-        <div class="test">
-          <SongBox />
-        </div>
-        <div class="test">
-          <SongBox />
-        </div>
-        <div class="test">
-          <SongBox />
-        </div>
-        <div class="test">
-          <SongBox />
-        </div>
-        <div class="test">
-          <SongBox />
-        </div>
-        <div class="test">
-          <SongBox />
+      </div>
+      <div class="row header-box q-col-gutter-sm" v-if="allPlaylists.length">
+        <div class="box" v-for="(playlist, index) in allPlaylists" :key="index">
+          <ListBox v-if="index < 8" :playlist="playlist" />
         </div>
       </div>
       <h6 class="text-white text-bold">Made for you</h6>
       <div class="row q-col-gutter-lg">
-        <div class="test">
-          <SongBox />
-        </div>
-        <div class="test">
-          <SongBox />
-        </div>
-        <div class="test">
-          <SongBox />
-        </div>
-        <div class="test">
-          <SongBox />
-        </div>
-        <div class="test">
-          <SongBox />
-        </div>
-        <div class="test">
-          <SongBox />
-        </div>
+        <!-- <div class="box">
+          <ListBox />
+        </div> -->
       </div>
     </div>
   </q-page>
@@ -74,7 +49,7 @@
 
 <script>
 import MiniBox from "../components/MiniBox";
-import SongBox from "../components/SongBox";
+import ListBox from "../components/ListBox";
 import { mapActions } from "vuex";
 
 export default {
@@ -82,13 +57,14 @@ export default {
 
   components: {
     MiniBox,
-    SongBox,
+    ListBox,
   },
 
   data() {
     return {
       greeetingMessage: "",
       recommendedSongs: [],
+      allPlaylists: [],
     };
   },
   methods: {
@@ -113,9 +89,15 @@ export default {
     onPlaySong(song) {
       this.playSong(song);
     },
+    getPlaylists() {
+      this.$axios.get("/lists").then((response) => {
+        this.allPlaylists = response.data;
+      });
+    },
   },
   mounted() {
     this.getTime();
+    this.getPlaylists();
   },
 };
 </script>
@@ -133,23 +115,19 @@ export default {
 .pageContainer {
   padding-top: 0px !important;
   margin-top: 0px !important;
+  margin-left: 1vw;
+  margin-right: 1vw;
 }
 
 .headerDiv {
-  background: #ed213a; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to top,
-    #121212,
-    #303b3e
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to top,
-    #121212,
-    #303b3e
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: #202020;
 }
 
-.test {
+.box {
   width: 10vw !important;
+}
+
+.header-box {
+  // justify-content: space-between;
 }
 </style>

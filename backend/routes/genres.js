@@ -14,7 +14,7 @@ router.get('/:genreId', async (req, res) => {
 
 router.post('/genre', async (req, res) => {
   const { name, userId } = req.body;
-
+  console.log(name, userId);
   await genreService.createGenre(userId, name);
 
   res.send('ok');

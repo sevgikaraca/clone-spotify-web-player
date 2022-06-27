@@ -1,15 +1,15 @@
 <template>
   <q-layout view="lHr LpR fFf">
     <q-header elevated class="header-class text-white">
-      <!-- <q-toolbar> -->
       <div class="row q-col-gutter-sm">
-        <div class="col-10">
+        <div class="col-11">
           <q-btn
             color="white"
             class="bg-grey-9 q-ma-sm q-ml-lg"
             round
             flat
             icon="chevron_left"
+            @click="$router.go(-1)"
           />
           <q-btn
             color="white"
@@ -17,54 +17,141 @@
             round
             flat
             icon="chevron_right"
+            @click="$router.go(1)"
           />
         </div>
-        <div class="col-2">
+        <div class="col-1">
+          <q-btn-dropdown
+            auto-close
+            flat
+            :label="user.name"
+            class="q-mt-md bg-grey-"
+            no-caps
+            v-if="user">
+            <q-list padding style="width: 250px" class="bg-dark text-white" >
+              <q-item clickable>
+                <q-item-section avatar>
+                  <q-avatar icon="account_circle" size="40px" font-size="40px" text-color="primary" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>{{ user.userName }}</q-item-label>
+                  <q-item-label caption>{{ user.email }}</q-item-label>
+                </q-item-section>
+              </q-item>
+              <q-item clickable @click="logout">
+                <q-item-section avatar>
+                  <q-avatar icon="logout" size="40px" font-size="40px" text-color="primary" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>Logout</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-btn-dropdown>
           <q-btn
             color="white"
             class="bg-grey-9 q-mr-xl q-mt-sm q-px-sm float-right"
-            label="Profile"
+            label="Login/Register"
             no-caps
             flat
             icon="person"
-            to="/profile"
+            to="/login"
+            v-else
           />
         </div>
       </div>
-      <!-- </q-toolbar> -->
     </q-header>
 
-    <q-drawer show-if-above content-class="bg-dark text-white">
+    <q-drawer
+      show-if-above
+      content-class="bg-black text-white q-pl-sm"
+      :width="240"
+    >
       <q-img
         src="../statics/logo-white.png"
         :ratio="16 / 9"
-        class="q-ma-lg"
+        class="q-my-lg"
         style="width: 130px; height: 39px"
       />
-      <q-list>
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
-
-        <q-separator class="q-my-md" dark />
+      <q-list class="text-grey-7 left-drawer-list" no-border>
+        <q-item
+          clickable
+          v-ripple
+          to="/"
+          class="q-pl-sm bg-black text-grey"
+          active-class="custom-color text-bold text-white"
+          exact
+        >
+          <q-item-section avatar>
+            <q-icon name="home" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label> Home </q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item
+          clickable
+          v-ripple
+          to="/playlists"
+          class="q-pl-sm bg-black text-grey"
+          active-class="custom-color text-bold text-white"
+          exact
+        >
+          <q-item-section avatar>
+            <q-icon name="person" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label> Your Library </q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item
+          clickable
+          v-ripple
+          to="/create-playlist"
+          class="q-pl-sm bg-black text-grey"
+          active-class="custom-color text-bold text-white"
+          exact
+        >
+          <q-item-section avatar>
+            <q-icon name="add" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label> Create Playlist </q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item
+          clickable
+          v-ripple
+          to="/playlists/liked_songs"
+          class="q-pl-sm bg-black text-grey"
+          active-class="custom-color text-bold text-white"
+          exact
+        >
+          <q-item-section avatar>
+            <q-icon name="favorite" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label> Liked Songs </q-item-label>
+          </q-item-section>
+        </q-item>
       </q-list>
+      <q-separator class="q-my-md" dark />
+      <q-scroll-area style="height: 530px; max-height: 530px">
+        <q-list bordered v-for="list in this.myPlaylists" :key="list" >
+          <q-item clickable v-ripple dense @click="goToPlaylist(list._id)">
+            <q-item-section> {{ list.name }} </q-item-section>
+          </q-item>
+        </q-list>
+      </q-scroll-area>
     </q-drawer>
 
     <q-page-container
-      style="padding-top: 0; background-color: #121212 !important"
+      style="padding-top: 0; background-color: #202020 !important"
       class="q-my-none"
     >
-      <router-view />
+      <router-view v-on:userLogined="userLogin"/>
     </q-page-container>
     <q-footer elevated class="bg-secondary text-white">
-      <!-- <q-toolbar>
-        <q-toolbar-title>
-          Title
-        </q-toolbar-title>
-      </q-toolbar> -->
-
       <div class="row q-col-gutter-sm">
         <div class="col-2">
           <div class="row q-col-gutter-xs">
@@ -72,12 +159,14 @@
               <q-img
                 src="https://placeimg.com/500/300/nature"
                 style="height: 60px; width: 60px"
-                class="q-mt-sm q-ml-sm "
+                class="q-mt-sm q-ml-sm"
               />
             </div>
             <div class="col-8 q-mt-lg">
-              <q-item class="player-item no-padding no-margin">{{ queue[0] && queue[0].name }} </q-item>
-              <q-item to="" class="player-item no-padding no-margin" >
+              <q-item class="player-item no-padding no-margin"
+                >{{ queue[0] && queue[0].name }}
+              </q-item>
+              <q-item to="" class="player-item no-padding no-margin">
                 {{
                   queue[0] &&
                   queue[0].artists.length &&
@@ -89,12 +178,19 @@
             </div>
           </div>
         </div>
-        <div class="col-10">
+        <div class="col-9">
           <div class="row flex justify-center">
             <div class="q-my-md col-10">
               <player v-if="queue" :song="queue[0]" v-on:loading="loading" />
             </div>
           </div>
+        </div>
+        <div class="col-1 flex justify-center items-center">
+          <q-icon
+            name="menu"
+            class="cursor-pointer"
+            @click="$router.push('/queue')"
+          />
         </div>
       </div>
     </q-footer>
@@ -102,61 +198,30 @@
 </template>
 
 <script>
-import EssentialLink from "components/EssentialLink.vue";
 import { mapState, mapActions } from "vuex";
 import PlayerVue from "../components/player/Player";
-
-const linksData = [
-  {
-    title: "Home",
-    icon: "home",
-    to: "/",
-  },
-  {
-    title: "Search",
-    icon: "search",
-    link: "https://github.com/quasarframework",
-  },
-  {
-    title: "Your Library",
-    icon: "library_books",
-    link: "https://chat.quasar.dev",
-  },
-  {
-    title: "Create Playlist",
-    icon: "playlist_add",
-    link: "https://forum.quasar.dev",
-  },
-  {
-    title: "Liked Songs",
-    icon: "favorite",
-    link: "https://twitter.quasar.dev",
-  },
-];
 
 export default {
   name: "MainLayout",
   components: {
-    EssentialLink,
     player: PlayerVue,
   },
   data() {
     return {
       leftDrawerOpen: false,
-      essentialLinks: linksData,
       trackPath: "",
       isLoading: true,
+      myPlaylists: [],
+      user: null
     };
   },
   computed: {
     ...mapState("songs", ["queue"]),
   },
   mounted() {
-    setInterval(() => {
-      console.log(this.queue);
-    }, 2000);
-    // this.user = this.$q.sessionStorage.getItem('user');
+    this.user = this.$q.sessionStorage.getItem('user');
     this.isLoading = false;
+    this.getMyPlaylists()
   },
   watch: {
     isLoading() {
@@ -183,16 +248,42 @@ export default {
         this.user = this.$q.sessionStorage.getItem("user");
       }
     },
+    getMyPlaylists(){
+      this.$axios.get("/lists").then((response) => {
+        let allPlaylists = response.data;
+        allPlaylists.forEach(list => {
+          if(list.ownerId && list.ownerId._id == "6252c136f3bfbc4e489321eb"){
+            this.myPlaylists.push(list)
+          }
+        });
+      });
+    },
+    goToPlaylist(id){
+      this.$router.push(`/playlists/detail/${id}`)
+    }
   },
 };
 </script>
 
 <style lang="scss">
 .header-class {
-  background-color: rgba(0, 0, 0, 0) !important;
+  background-color:#202020;
 }
 
-.player-item{
+.player-item {
   min-height: 20px;
+}
+
+.left-drawer-list {
+  .q-item__section--avatar {
+    min-width: 42px;
+  }
+  .q-expansion-item .q-item {
+    padding: 8px !important;
+  }
+}
+
+.custom-color {
+  color: #fff !important;
 }
 </style>

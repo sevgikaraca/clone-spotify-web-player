@@ -3,7 +3,7 @@ const Song = require('../models/song');
 const userService = require('./user-service');
 
 class SongService extends BaseService {
-  async addSong(userId, id, name, duration, releaseDate, artists, genres, recordCompany) {
+  async addSong(userId, id, name, duration, releaseDate, artists, genres, recordCompany, albumId) {
     const song = await this.insert({
       creatorUserId: userId,
       trackId: id,
@@ -13,6 +13,7 @@ class SongService extends BaseService {
       artists,
       genres,
       recordCompany,
+      album: albumId,
     });
     const user = await userService.find(userId);
 
@@ -27,6 +28,10 @@ class SongService extends BaseService {
       await this.removeBy('_id', song.id);
     }
     return this;
+  }
+
+  async getWithAlbumInfo(){
+    //
   }
 }
 

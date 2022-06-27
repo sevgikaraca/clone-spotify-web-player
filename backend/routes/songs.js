@@ -69,9 +69,8 @@ router.post('/song', async (req, res) => {
       });
 
       const {
-        name, duration, releaseDate, artists, genres, recordCompany, userId
+        name, duration, releaseDate, artists, genres, recordCompany, userId, albumId
       } = req.body;
-      console.log({ name, duration, releaseDate, artists, genres, recordCompany, userId});
       const uploadStream = bucket.openUploadStream(req.body.name);
       const { id } = uploadStream;
       readableTrackStream.pipe(uploadStream);
@@ -88,6 +87,7 @@ router.post('/song', async (req, res) => {
           artists,
           genres,
           recordCompany,
+          albumId,
         );
         res.status(201).json({ message: `Dosya başarıyla yüklendi, Mongo ObjectID: ${id}` });
       });

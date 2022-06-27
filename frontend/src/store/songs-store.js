@@ -2,7 +2,7 @@ import axios from 'axios';
 import { SessionStorage } from 'quasar';
 
 const state = {
-  nowPlaying: '',
+  nowPlaying: null,
   queue: [],
 };
 
@@ -10,9 +10,12 @@ const mutations = {
   addToQueue(state, song) {
     state.queue.push(song);
   },
-  // playFromQueue(state, index) {
-  //   state.queue.splice(0, index);
-  // },
+  playPlaylist(state, songs) {
+    state.queue = [...songs];
+  },
+  playFromQueue(state, index) {
+    state.queue.splice(0, index);
+  },
   playSong(state, song) {
     state.queue = [song];
   },
@@ -32,9 +35,12 @@ const actions = {
       commit('addToQueue', songs);
     }
   },
-  // playFromQueue({ commit }, songIndex) {
-  //   commit('playFromQueue', songIndex);
-  // },
+  playPlaylist({ commit }, songs) {
+    commit('playPlaylist', songs);
+  },
+  playFromQueue({ commit }, songIndex) {
+    commit('playFromQueue', songIndex);
+  },
   playSong({ commit }, song) {
     commit('playSong', song);
   },
@@ -51,15 +57,15 @@ const actions = {
   },
   async addSongToLibrary(context, song) {
     const user = SessionStorage.getItem('user');
-    const request = await axios.post(`users/${user._id}/saveSong/${song._id}`);
+    console.log(user);
+    const response = await axios.post(`users/favSong`, {userId: user._id, songId: song._id});
     try {
-      SessionStorage.set('user', {});
+      SessionStorage.set('user', response);
     } catch (error) {
       console.log(error);
     }
-    console.log(SessionStorage.set('user', user));
-    console.log(SessionStorage.getItem('user'));
-    return request;
+
+    return response;
   },
   async fetchSongs() {
     const request = await axios.get('/songs');
