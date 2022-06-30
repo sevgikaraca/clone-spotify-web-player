@@ -13,7 +13,6 @@ const SongSchema = new mongoose.Schema({
   name: String,
   duration: Number,
   releaseDate: Date,
-  recordCompany: String,
   artists: [{
     type: mongoose.Types.ObjectId,
     ref: 'Artist',
@@ -29,7 +28,9 @@ const SongSchema = new mongoose.Schema({
     ref: 'Album',
     autopopulate: { maxDepth: 1 },
   },
-}, { timestamps: true });
+},
+
+{ timestamps: true });
 
 SongSchema.plugin(require('mongoose-autopopulate'));
 

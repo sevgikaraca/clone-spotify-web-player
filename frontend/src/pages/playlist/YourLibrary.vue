@@ -2,7 +2,7 @@
   <q-page class="pageContainer" style="background-color: #202020">
     <div class="row header-box q-col-gutter-xs">
       <div class="col-12 q-mt-xl">
-        <p class="text-white text-bold q-mt-md" style="font-size: 18px">
+        <p class="text-white text-bold q-mt-md" style="font-size: 30px">
           Playlists
         </p>
       </div>
@@ -10,19 +10,15 @@
         class="col-3 likedSongs text-bold text-white q-s q-px-lg q-mt-md"
         style="font-weight: 700; border: 1px solid #121212; border-radius: 7px"
       >
-        <div class="row q-col-gutter-xs">
-          <div class="col-12 q-mt-md">
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Reiciendis, accusamus laudantium qui atque veritatis aliquid
-              recusandae, optio ipsum impedit labore sapiente rerum eum ab vero
-              soluta, totam incidunt. Aperiam, porro!
-            </p>
+        <div class="row q-col-gutter-xs" @click="gotoLiked()" >
+          <div class="col-12 q-mt-xl">
+              <span v-for=" song in user.favoriteSongs" :key="song" > {{ song.artists[0].name }}
+              <span class="text-grey-5"> {{ song.name }}  </span></span>
           </div>
           <div class="col-10">
             <br />
             <p style="font-size: 30px">Liked Songs</p>
-            <p>456 liked songs</p>
+            <p> {{ user.favoriteSongs.length }} liked songs</p>
           </div>
           <div class="col-2 q-mt-xl hidden-child float-right">
             <q-btn
@@ -51,26 +47,6 @@
       <!-- <div class="row header-box q-col-gutter-sm" v-if="allMyPlaylists.length"> -->
         <div class="box" v-for="(playlist, index) in allMyPlaylists" :key="index">
           <ListBox v-if="index < 8" :playlist="playlist" />
-        </div><div class="box" v-for="(playlist, index) in allMyPlaylists" :key="index">
-          <ListBox v-if="index < 8" :playlist="playlist" />
-        </div><div class="box" v-for="(playlist, index) in allMyPlaylists" :key="index">
-          <ListBox v-if="index < 8" :playlist="playlist" />
-        </div><div class="box" v-for="(playlist, index) in allMyPlaylists" :key="index">
-          <ListBox v-if="index < 8" :playlist="playlist" />
-        </div><div class="box" v-for="(playlist, index) in allMyPlaylists" :key="index">
-          <ListBox v-if="index < 8" :playlist="playlist" />
-        </div><div class="box" v-for="(playlist, index) in allMyPlaylists" :key="index">
-          <ListBox v-if="index < 8" :playlist="playlist" />
-        </div><div class="box" v-for="(playlist, index) in allMyPlaylists" :key="index">
-          <ListBox v-if="index < 8" :playlist="playlist" />
-        </div><div class="box" v-for="(playlist, index) in allMyPlaylists" :key="index">
-          <ListBox v-if="index < 8" :playlist="playlist" />
-        </div><div class="box" v-for="(playlist, index) in allMyPlaylists" :key="index">
-          <ListBox v-if="index < 8" :playlist="playlist" />
-        </div><div class="box" v-for="(playlist, index) in allMyPlaylists" :key="index">
-          <ListBox v-if="index < 8" :playlist="playlist" />
-        </div><div class="box" v-for="(playlist, index) in allMyPlaylists" :key="index">
-          <ListBox v-if="index < 8" :playlist="playlist" />
         </div>
       </div>
   </q-page>
@@ -90,6 +66,7 @@ export default {
   data() {
     return {
       allMyPlaylists: [],
+      user: {},
     };
   },
   mounted() {
@@ -106,6 +83,9 @@ export default {
         this.allMyPlaylists = response.data;
       });
     },
+    gotoLiked(){
+      this.$router.push("/playlists/liked_songs");
+    }
   },
 };
 </script>

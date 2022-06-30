@@ -10,8 +10,6 @@ class AlbumService extends BaseService {
       if (user) {
         album = await this.insert({ name, albumCoverId });
         let artist = await artistService.find({_id: artistId });
-        console.log(artist.albums)
-        console.log(album._id)
         artist = await artistService.update(artist._id, { albums: [...artist.albums, album._id],});
       } else {
         return new Error('Invalid User!');
@@ -21,3 +19,5 @@ class AlbumService extends BaseService {
 }
 
 module.exports = new AlbumService(Album);
+
+

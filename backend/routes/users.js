@@ -48,4 +48,10 @@ router.post('/favSong', async (req, res) => {
   res.send(user);
 });
 
+router.put('/removeSong', async (req, res) => {
+  const { userId, songId } = req.body;
+  const user = await userService.removeSong(userId, songId);
+  res.send(user);
+});
+
 module.exports = router;

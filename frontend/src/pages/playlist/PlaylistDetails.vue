@@ -1,31 +1,33 @@
 <template>
   <q-page class="pageContainer" style="background-color: #202020">
     <div class="row header-box q-col-gutter-xs">
-          <div class="col-2 q-mt-xl">
+      <div class="col-2 q-mt-xl">
         <img
           class="q-mb-lg q-mt-xl q-ml-md"
           ratio="1"
-          src="../../statics/likes.png"
+          src="../../statics/nota.png"
           width="170px"
           height="170px"
         />
-      </div>.
-      <div class="col-4 q-mt-xl">
+      </div>
+      <div class="col-10 q-mt-xl">
         <p class="text-white q-mt-xl">Playlist</p>
-        <h2 class="text-white text-bold no-margin"> {{ this.playlist.name }} </h2>
+        <h2 class="text-white text-bold no-margin">{{ this.playlist.name }}</h2>
         <p class="text-white q-mt-xl">
-          <a class="text-white text-bold" href="#/profile">{{ this.playlist.ownerId.name }}</a> -
-          {{ this.playlist.songs.length }} songs
+          <a class="text-white text-bold" href="#/profile">{{
+            this.playlist.ownerId.name
+          }}</a>
+          - {{ this.playlist.songs.length }} songs
         </p>
       </div>
-      <div class="col-4 text-white q-ma-sm"> #TITLE </div>
-      <div class="col-6  text-white q-ma-sm"> ALBUM </div>
-      <div class="col-9 ">
+      <div class="col-4 text-white q-ma-sm">#TITLE</div>
+      <div class="col-6 text-white q-ma-sm">ALBUM</div>
+      <div class="col-11">
         <q-list
           class="text-white"
           bordered
           v-for="(song, index) in this.playlist.songs"
-          :key="index"
+          :key="song"
         >
           <q-item
             clickable
@@ -52,8 +54,22 @@
             <q-item-section>
               {{ song.album.name }}
             </q-item-section>
-            <q-item-section avatar class="float-left no-margin text-right" @click="addToFavorite(song)" >
-              <q-icon outlined color="white" name="favorite_border" />
+            <q-item-section
+              v-if="user"
+              avatar
+              class="float-left no-margin text-right"
+              @click="
+                () => {
+                  if (isInFavorites(song._id)) removeFromFavorites(song);
+                  else addToFavorite(song);
+                }
+              "
+            >
+              <q-icon
+                outlined
+                color="white"
+                :name="isInFavorites(song._id) ? 'favorite' : 'favorite_border'"
+              />
             </q-item-section>
           </q-item>
         </q-list>
@@ -70,22 +86,52 @@ export default {
   data() {
     return {
       playlist: {},
+      user: {},
     };
   },
 
   methods: {
-    ...mapActions("songs", ["addToQueue", "addSongToLibrary"]),
+    ...mapActions("songs", [
+      "addToQueue",
+      "addSongToLibrary",
+      "removeSongFromLibrary",
+    ]),
     fetch() {
       this.$axios.get(`lists/${this.$route.params.id}`).then((response) => {
         this.playlist = response.data;
       });
     },
-    async addToFavorite(song){
+    async removeFromFavorites(song) {
+      const response = await this.removeSongFromLibrary(song);
+      this.$q.notify({
+        type: "info",
+        message: "Song Removed from Library",
+        position: "top",
+      });
+    },
+    async addToFavorite(song) {
       const response = await this.addSongToLibrary(song);
-      console.log(response);
-    }
+      this.$q.notify({
+        type: "positive",
+        message: "Song Added to Library",
+        position: "top",
+      });
+    },
+    isInFavorites(songId) {
+      if (!this.user) return false;
+
+      if (this.user.favoriteSongs && this.user.favoriteSongs.length > 0) {
+        const matchedSong = this.user.favoriteSongs.find(
+          (song) => song._id == songId
+        );
+
+        if (matchedSong) return true;
+        else return false;
+      }
+    },
   },
   mounted() {
+    this.user = this.$q.sessionStorage.getItem("user");
     this.fetch();
   },
 };

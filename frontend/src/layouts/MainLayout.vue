@@ -27,11 +27,17 @@
             :label="user.name"
             class="q-mt-md bg-grey-"
             no-caps
-            v-if="user">
-            <q-list padding style="width: 250px" class="bg-dark text-white" >
-              <q-item clickable>
+            v-if="user"
+          >
+            <q-list padding style="width: 250px" class="bg-dark text-white">
+              <q-item clickable to="/profile">
                 <q-item-section avatar>
-                  <q-avatar icon="account_circle" size="40px" font-size="40px" text-color="primary" />
+                  <q-avatar
+                    icon="account_circle"
+                    size="40px"
+                    font-size="40px"
+                    text-color="primary"
+                  />
                 </q-item-section>
                 <q-item-section>
                   <q-item-label>{{ user.userName }}</q-item-label>
@@ -40,7 +46,12 @@
               </q-item>
               <q-item clickable @click="logout">
                 <q-item-section avatar>
-                  <q-avatar icon="logout" size="40px" font-size="40px" text-color="primary" />
+                  <q-avatar
+                    icon="logout"
+                    size="40px"
+                    font-size="40px"
+                    text-color="primary"
+                  />
                 </q-item-section>
                 <q-item-section>
                   <q-item-label>Logout</q-item-label>
@@ -107,7 +118,7 @@
         <q-item
           clickable
           v-ripple
-          to="/create-playlist"
+          to="/playlists/create"
           class="q-pl-sm bg-black text-grey"
           active-class="custom-color text-bold text-white"
           exact
@@ -137,7 +148,7 @@
       </q-list>
       <q-separator class="q-my-md" dark />
       <q-scroll-area style="height: 530px; max-height: 530px">
-        <q-list bordered v-for="list in this.myPlaylists" :key="list" >
+        <q-list bordered v-for="list in allPlaylists" :key="list">
           <q-item clickable v-ripple dense @click="goToPlaylist(list._id)">
             <q-item-section> {{ list.name }} </q-item-section>
           </q-item>
@@ -149,32 +160,22 @@
       style="padding-top: 0; background-color: #202020 !important"
       class="q-my-none"
     >
-      <router-view v-on:userLogined="userLogin"/>
+      <router-view v-on:userLogined="userLogin" />
     </q-page-container>
     <q-footer elevated class="bg-secondary text-white">
       <div class="row q-col-gutter-sm">
         <div class="col-2">
           <div class="row q-col-gutter-xs">
-            <div class="col-4 q-mt-sm">
+            <div class="col-2 text-center text-bold text-white">
+            {{ queue[0] && queue[0].name ? "" : "No Queue"}}
               <q-img
-                src="https://placeimg.com/500/300/nature"
-                style="height: 60px; width: 60px"
+              v-if="queue[0]"
+                :src="`${$axios.defaults.baseURL}/albums/albumCover/${queue[0].album.albumCoverId}`"
+                :ratio="1"
                 class="q-mt-sm q-ml-sm"
+                height="100px"
+                width="100px"
               />
-            </div>
-            <div class="col-8 q-mt-lg">
-              <q-item class="player-item no-padding no-margin"
-                >{{ queue[0] && queue[0].name }}
-              </q-item>
-              <q-item to="" class="player-item no-padding no-margin">
-                {{
-                  queue[0] &&
-                  queue[0].artists.length &&
-                  queue[0].artists.map((a) => a.name).join(", ")
-                }}
-              </q-item>
-              <!-- <p>{{queue[0] && queue[0].name}}</p>
-              <p>{{queue[0] && queue[0].artists.length && queue[0].artists.map((a) => a.name).join(', ')}}</p> -->
             </div>
           </div>
         </div>
@@ -212,16 +213,23 @@ export default {
       trackPath: "",
       isLoading: true,
       myPlaylists: [],
-      user: null
+      allPlaylists: [],
+      isPlaying: false,
+      user: {},
     };
   },
   computed: {
     ...mapState("songs", ["queue"]),
   },
   mounted() {
-    this.user = this.$q.sessionStorage.getItem('user');
+    this.user = this.$q.sessionStorage.getItem("user");
+    this.$axios.get(`/users/${this.user._id}`)
+      .then(({data}) => {
+        this.$q.sessionStorage.set("user", data);
+      });
     this.isLoading = false;
-    this.getMyPlaylists()
+    this.getMyPlaylists();
+    this.getPlaylists();
   },
   watch: {
     isLoading() {
@@ -248,26 +256,31 @@ export default {
         this.user = this.$q.sessionStorage.getItem("user");
       }
     },
-    getMyPlaylists(){
+    getPlaylists() {
+      this.$axios.get("/lists").then((response) => {
+        this.allPlaylists = response.data;
+      });
+    },
+    getMyPlaylists() {
       this.$axios.get("/lists").then((response) => {
         let allPlaylists = response.data;
-        allPlaylists.forEach(list => {
-          if(list.ownerId && list.ownerId._id == "6252c136f3bfbc4e489321eb"){
-            this.myPlaylists.push(list)
+        allPlaylists.forEach((list) => {
+          if (list.ownerId && list.ownerId._id == this.user.userId) {
+            this.myPlaylists.push(list.name);
           }
         });
       });
     },
-    goToPlaylist(id){
-      this.$router.push(`/playlists/detail/${id}`)
-    }
+    goToPlaylist(id) {
+      this.$router.push(`/playlists/detail/${id}`);
+    },
   },
 };
 </script>
 
 <style lang="scss">
 .header-class {
-  background-color:#202020;
+  background-color: #202020;
 }
 
 .player-item {

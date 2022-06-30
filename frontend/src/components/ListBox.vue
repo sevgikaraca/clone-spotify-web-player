@@ -1,12 +1,15 @@
 <template>
-  <div class="row q-col-gutter-xs q-pa-xs text-bold listBox" @click="goToPlaylist(playlist)">
+  <div
+    class="row q-col-gutter-xs q-pa-xs text-bold listBox"
+    @click="goToPlaylist(playlist)"
+  >
     <div class="col-12 text-center" v-if="playlist">
       <q-img
         v-if="playlist && playlist.playlistCoverId"
         ratio="1"
         width="150px"
         height="150px"
-        class="img q-mt-sm"
+        class="img q-my-md"
         :src="`${$axios.defaults.baseURL}/lists/playlistCover/${
           playlist && playlist.playlistCoverId
         }`"
@@ -20,7 +23,7 @@
             icon="play_arrow"
             dense
             round
-            @click="playStopSong()"
+            @click.stop="playPlaylist(playlist.songs), isPlaying = true"
           />
           <q-btn
             v-else
@@ -30,7 +33,7 @@
             icon="pause"
             dense
             round
-            @click="playStopSong()"
+            @click.stop="playPlaylist(playlist.songs), isPlaying = false"
           />
         </div>
       </q-img>
@@ -40,7 +43,7 @@
         :ratio="1"
         width="150px"
         height="150px"
-        class="img q-mt-sm"
+        class="img q-my-md"
       >
         <div class="hidden-child float-right">
           <q-btn
@@ -51,7 +54,7 @@
             icon="play_arrow"
             dense
             round
-            @click="playStopSong()"
+            @click.stop="playPlaylist(playlist.songs), isPlaying = true"
           />
           <q-btn
             v-else
@@ -61,7 +64,7 @@
             icon="pause"
             dense
             round
-            @click="playStopSong()"
+            @click.stop="playPlaylist(playlist.songs), isPlaying = false"
           />
         </div>
       </q-img>
@@ -76,7 +79,11 @@
     </div>
 
     <q-menu touch-position context-menu>
-      <q-list dense style="min-width: 100px; background: #181818;" class="text-white">
+      <q-list
+        dense
+        style="min-width: 100px; background: #181818"
+        class="text-white"
+      >
         <q-item clickable>
           <q-item-section>Add to Library</q-item-section>
         </q-item>
@@ -86,11 +93,15 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
   name: "ListBox",
 
   data() {
-    return {};
+    return {
+      isPlaying: false
+    };
   },
 
   props: {
@@ -110,9 +121,11 @@ export default {
     },
   },
   methods: {
-    goToPlaylist(playlist){
-      this.$router.push(`/playlists/detail/${playlist._id}`)
-    }
+    ...mapActions("songs", ["playPlaylist"]),
+
+    goToPlaylist(playlist) {
+      this.$router.push(`/playlists/detail/${playlist._id}`);
+    },
   },
 };
 </script>
@@ -142,7 +155,7 @@ export default {
   background-color: #282828;
   cursor: pointer;
   .img {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   }
 }
 .listBox:hover .hidden-child {
