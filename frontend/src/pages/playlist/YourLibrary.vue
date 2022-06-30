@@ -3,7 +3,7 @@
     <div class="row header-box q-col-gutter-xs">
       <div class="col-12 q-mt-xl">
         <p class="text-white text-bold q-mt-md" style="font-size: 30px">
-          Playlists
+          Your Library
         </p>
       </div>
       <div
@@ -29,7 +29,7 @@
               icon="play_arrow"
               dense
               round
-              @click="playStopSong()"
+            @click.stop="playPlaylist(user.favoriteSongs.songs), isPlaying = true"
             />
             <q-btn
               v-else
@@ -39,7 +39,7 @@
               icon="pause"
               dense
               round
-              @click="playStopSong()"
+            @click.stop="playPlaylist(user.favoriteSongs.songs), isPlaying = true"
             />
           </div>
         </div>
@@ -67,6 +67,7 @@ export default {
     return {
       allMyPlaylists: [],
       user: {},
+      isPlaying: false
     };
   },
   mounted() {
@@ -74,7 +75,7 @@ export default {
     this.getPlaylists();
   },
   methods: {
-    ...mapActions("songs", ["addToQueue", "addSongToLibrary"]),
+    ...mapActions("songs", ["addToQueue", "addSongToLibrary", "playPlaylist"]),
     async addToFavorite(song) {
       const response = await this.addSongToLibrary(song);
     },
