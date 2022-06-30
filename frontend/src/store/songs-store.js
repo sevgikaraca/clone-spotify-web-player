@@ -11,6 +11,7 @@ const mutations = {
     state.queue.push(song);
   },
   playPlaylist(state, songs) {
+    if (!Array.isArray(songs)) return;
     state.queue = [...songs];
   },
   playFromQueue(state, index) {
@@ -58,9 +59,25 @@ const actions = {
   async addSongToLibrary(context, song) {
     const user = SessionStorage.getItem('user');
     console.log(user);
-    const response = await axios.post(`users/favSong`, {userId: user._id, songId: song._id});
+    let response;
     try {
-      SessionStorage.set('user', response);
+      response = await axios.post(`users/favSong`, { userId: user._id, songId: song._id });
+      user.favoriteSongs.push(song);
+      SessionStorage.set('user', user);
+    } catch (error) {
+      console.log(error);
+    }
+
+    return response;
+  },
+  async removeSongFromLibrary(context, song) {
+    const user = SessionStorage.getItem('user');
+    console.log(user);
+    let response;
+    try {
+      response = await axios.post(`users/removeSong`, { userId: user._id, songId: song._id });
+      user.favoriteSongs.push(song);
+      SessionStorage.set('user', user);
     } catch (error) {
       console.log(error);
     }

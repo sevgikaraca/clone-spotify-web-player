@@ -18,6 +18,7 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: [true, 'The password field is required!'],
     minlength: 5,
+    select: false
   },
   savedLists: [{
     type: mongoose.Types.ObjectId,

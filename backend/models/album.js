@@ -17,7 +17,6 @@ const AlbumSchema = new mongoose.Schema({
     autopopulate: false,
   },
   releaseDate: Date,
-  recordCompany: String,
 }, { timestamps: true });
 
 AlbumSchema.plugin(require('mongoose-autopopulate'));

@@ -13,9 +13,9 @@
       </div>
       <div class="col-4 q-mt-xl">
         <p class="text-white q-mt-xl">Profile</p>
-        <h2 class="text-white text-bold no-margin">Sevgi</h2>
+        <h2 class="text-white text-bold no-margin">{{ this.user.name }}</h2>
         <p class="text-white q-mt-xl">
-          5 public playlists - 4 Followers - 5 Following
+          {{ this.allMyPlaylists.length }} playlists - 4 Followers - 5 Following
         </p>
       </div>
     </div>
@@ -139,6 +139,7 @@
 
 <script>
 import ListBox from "../components/ListBox";
+import { mapState, mapActions } from "vuex";
 
 export default {
   name: "Profile",
@@ -149,11 +150,26 @@ export default {
 
   data() {
     return {
-      playlistCount: 0,
       followersCount: 0,
       followingCount: 0,
+      user: {},
+      allMyPlaylists: [],
     };
-  }
+  },
+  mounted() {
+    this.user = this.$q.sessionStorage.getItem("user");
+    this.$axios.get(`/users/${this.user._id}`).then(({ data }) => {
+      this.$q.sessionStorage.set("user", data);
+    });
+    getPlaylists()
+  },
+  methods: {
+    getPlaylists() {
+      this.$axios.get("/lists").then((response) => {
+        this.allMyPlaylists = response.data;
+      });
+    },
+  },
 };
 </script>
 

@@ -15,13 +15,12 @@ class UserService extends BaseService {
   }
 
   async login(usernameOrMail, password) {
-    const user = await User.findOne({
-      email: usernameOrMail,
-    }) || await User.findOne({
-      userName: usernameOrMail,
-    });
+    const user = await User.findOne({email: usernameOrMail}).select('+password') ||
+      await User.findOne({  userName: usernameOrMail }).select('+password');
+
     if (!user) return false;
-    const result = bcrypt.compareSync(password, user.password);
+
+    const result = bcrypt.compareSync(password, user.password); // girilen şifre ve encrypt şifre karşılaştırılması
     if (result) {
       delete user.password;
       return user
@@ -31,14 +30,18 @@ class UserService extends BaseService {
 
   async favSong(userId, songId) {
     const user = await this.find(userId);
+    console.log(userId);
     user.favoriteSongs.push(songId);
     await this.update(userId, user);
   }
 
   async removeSong(userId, songId) {
-    // const user = await this.find(userId);
-    // user.favoriteSongs.push(songId);
-    // await this.update(userId, user);
+    const user = await this.find(userId);
+    const index = user.favoriteSongs.findIndex(song => {
+      return song._id === songId;
+    });
+    user.favoriteSongs.splice(index, 1);
+    await this.update(userId, user);
   }
 
   async saveList(userId, listId) {

@@ -20,7 +20,7 @@
           class="text-white text-bold col-10 q-mt-md"
           style="font-size: 22px"
         >
-          Günlük müzik ihtiyacın
+          Your Daily Music Needs
         </div>
         <div class="col-2 float-right flex justify-end q-mt-md">
           <q-btn
@@ -33,16 +33,16 @@
         </div>
       </div>
       <div class="row header-box q-col-gutter-sm" v-if="allPlaylists.length">
-        <div class="box" v-for="(playlist, index) in allPlaylists" :key="index">
+        <div class="box" v-for="(playlist, index) in allPlaylists" :key="playlist">
           <ListBox v-if="index < 8" :playlist="playlist" />
         </div>
       </div>
-      <h6 class="text-white text-bold">Made for you</h6>
+      <!-- <h6 class="text-white text-bold">Made for you</h6>
       <div class="row q-col-gutter-lg">
-        <!-- <div class="box">
+        <div class="box">
           <ListBox />
-        </div> -->
-      </div>
+        </div>
+      </div> -->
     </div>
   </q-page>
 </template>

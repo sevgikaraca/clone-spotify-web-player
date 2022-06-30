@@ -20,7 +20,7 @@
       </div>
       <div class="col6 text-white q-ma-sm">#TITLE</div>
       <div class="col-6 text-white q-ma-sm">ALBUM</div>
-      <div class="col-9">
+      <div class="col-11">
         <q-list
           class="text-white"
           bordered

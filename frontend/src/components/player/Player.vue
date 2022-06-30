@@ -1,9 +1,18 @@
 <template>
-  <div
-    class="col-6 row play"
-    style="border-radius: 1rem"
-  >
-    <div class="col-lg-2 col-sm-3 q-py-sm q-pl-md">
+  <div class="row play" style="border-radius: 1rem">
+    <div class="col-2">
+      <q-item class="player-item no-padding no-margin"
+        >{{ queue[0] && queue[0].name }}
+      </q-item>
+      <q-item to="" class="player-item no-padding no-margin">
+        {{
+          queue[0] &&
+          queue[0].artists.length &&
+          queue[0].artists.map((a) => a.name).join(", ")
+        }}
+      </q-item>
+    </div>
+    <div class="col-2 q-py-sm q-pl-md">
       <q-btn
         color="white"
         flat
@@ -43,22 +52,8 @@
         "
       />
     </div>
-    <div v-if="$q.screen.width < 1440" class="col-9 text-center">
-      <marquee>
-        <a
-          :href="`#/artists/${song ? song.artists[0]._id : ''}`"
-          class="artist-link"
-        >
-          {{ song ? song.artists[0].name : "" }}
-        </a>
-        {{ song ? " - " + song.name : "" }}
-      </marquee>
-    </div>
-    <div class="col-lg-10 col-sm-12">
-      <!-- <div v-if="!song" class="q-ml-md">
-        <marquee>Add song to queue or play.</marquee>
-      </div> -->
-      <div  id="waveform" class="col-12 q-ml-md"></div>
+    <div class="col-8">
+      <div id="waveform" class="col-12 q-ml-md"></div>
     </div>
   </div>
 </template>
@@ -74,7 +69,8 @@ export default {
       leftDrawerOpen: false,
       wavesurfer: null,
       isPlaying: false,
-      backendUrl: 'http://localhost:3000',
+      backendUrl: "http://localhost:3000",
+      standard: 50,
     };
   },
   methods: {
@@ -113,7 +109,9 @@ export default {
         this.wavesurfer.empty();
         this.playNext();
       });
-      this.wavesurfer.load(`${this.backendUrl}/songs/track/${this.song.trackId}`);
+      this.wavesurfer.load(
+        `${this.backendUrl}/songs/track/${this.song.trackId}`
+      );
     },
   },
   computed: {
@@ -146,7 +144,9 @@ export default {
       } else {
         this.wavesurfer.empty();
       }
-      this.wavesurfer.load(`${this.backendUrl}/songs/track/${this.song.trackId}`);
+      this.wavesurfer.load(
+        `${this.backendUrl}/songs/track/${this.song.trackId}`
+      );
     },
     queue() {
       setTimeout(() => {
