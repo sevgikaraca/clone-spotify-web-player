@@ -147,7 +147,7 @@
         </q-item>
       </q-list>
       <q-separator class="q-my-md" dark />
-      <q-scroll-area style="height: 530px; max-height: 530px">
+      <q-scroll-area style="height: 520px; max-height: 520px">
         <q-list bordered v-for="list in allPlaylists" :key="list">
           <q-item clickable v-ripple dense @click="goToPlaylist(list._id)">
             <q-item-section> {{ list.name }} </q-item-section>
@@ -162,7 +162,7 @@
     >
       <router-view v-on:userLogined="userLogin" />
     </q-page-container>
-    <q-footer elevated class="bg-secondary text-white">
+    <q-footer elevated class="no-margin no-padding bg-secondary text-white">
       <div class="row q-col-gutter-sm">
         <div class="col-2">
           <div class="row q-col-gutter-xs">
@@ -173,8 +173,8 @@
                 :src="`${$axios.defaults.baseURL}/albums/albumCover/${queue[0].album.albumCoverId}`"
                 :ratio="1"
                 class="q-mt-sm q-ml-sm"
-                height="100px"
-                width="100px"
+                height="80px"
+                width="80px"
               />
             </div>
           </div>

@@ -57,7 +57,7 @@
               class="float-left no-margin text-right"
               @click="addToFavorite(song)"
             >
-              <q-icon outlined color="white" name="favorite_border" />
+              <q-icon outlined color="white" name="favorite" />
             </q-item-section>
           </q-item>
         </q-list>
